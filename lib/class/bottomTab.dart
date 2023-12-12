@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:watchmovie_app/home_screen.dart';
-import 'package:watchmovie_app/home_screen2.dart';
+//import 'package:watchmovie_app/home_screen2.dart';
 
 class bottomTab extends StatefulWidget {
   const bottomTab({super.key});

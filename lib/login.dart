@@ -1,16 +1,39 @@
+//import 'dart:convert';
 import 'package:flutter/material.dart';
+//import 'package:http/http.dart' as http;
 import 'package:watchmovie_app/class/bottomTab.dart';
+//import 'package:watchmovie_app/class/url.dart';
 import 'package:watchmovie_app/register.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 class PageLogin extends StatefulWidget {
-  const PageLogin({super.key});
+  const PageLogin();
 
   @override
   State<PageLogin> createState() => _PageLoginState();
 }
 
 class _PageLoginState extends State<PageLogin> {
+
+  TextEditingController username = TextEditingController();
+  TextEditingController pass_word = TextEditingController();
+
+  // login()async{
+  //   var url = Uri.parse('$ipcon/project-api/member.js');
+  //   final response = await http.post(url,body:{
+  //     'phone': username.text,
+  //     'pass_word': pass_word.text
+  //   });
+
+  //   var data = jsonDecode(response.body);
+  //   if(data != []){
+  //     setState(() {
+  //       // print(data);
+  //       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+  //         return bottomTab();
+  //       },));
+  //     });}
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +81,7 @@ class _PageLoginState extends State<PageLogin> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextField(
+          controller: username,
           decoration: InputDecoration(
             hintText: "อีเมลหรือหมายเลขโทรศัพท์",
             border: OutlineInputBorder(
@@ -70,6 +94,7 @@ class _PageLoginState extends State<PageLogin> {
         ),
         SizedBox(height: 8),
         TextField(
+          controller: pass_word,
           decoration: InputDecoration(
             hintText: "รหัสผ่าน",
             border: OutlineInputBorder(

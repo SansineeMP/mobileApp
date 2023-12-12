@@ -23,10 +23,11 @@ class TrendingSlider extends StatelessWidget {
         itemBuilder: (context,itemIndex,pageViewIndex) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Container(
+            child: Image.asset(
+              'assets/test3.jpg',
               height: 300,
             width: 200,
-            color: Colors.amber,
+            
             ),
           );
         }, 

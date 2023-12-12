@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:watchmovie_app/class/bottomTab.dart';
 import 'package:watchmovie_app/login.dart';
 // import 'package:watchmovie_app/login copy.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       //   scaffoldBackgroundColor: const Color.fromARGB(66, 45, 44, 44),
       //   useMaterial3: true,
       // ),
-      home:  PageLogin(),
+      home:  bottomTab(),
     );
   }
 }
