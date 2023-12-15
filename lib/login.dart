@@ -1,7 +1,8 @@
 //import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-//import 'package:http/http.dart' as http;
 import 'package:watchmovie_app/class/bottomTab.dart';
+import 'package:watchmovie_app/class/url.dart';
 //import 'package:watchmovie_app/class/url.dart';
 import 'package:watchmovie_app/register.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -14,49 +15,71 @@ class PageLogin extends StatefulWidget {
 }
 
 class _PageLoginState extends State<PageLogin> {
-
+  final Dio dio = Dio();
   TextEditingController username = TextEditingController();
   TextEditingController pass_word = TextEditingController();
 
-  // login()async{
-  //   var url = Uri.parse('$ipcon/project-api/member.js');
-  //   final response = await http.post(url,body:{
-  //     'phone': username.text,
-  //     'pass_word': pass_word.text
-  //   });
+  login() async {
+    try {
+      final response = await dio.post("$ipcon/member/login",
+          data: {'phone': username.text, 'pass_word': pass_word.text});
+      print(response);
 
-  //   var data = jsonDecode(response.body);
-  //   if(data != []){
-  //     setState(() {
-  //       // print(data);
-  //       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-  //         return bottomTab();
-  //       },));
-  //     });}
-  // }
+      if (response.statusCode == 200) {
+        showFlushbar('Login success', Colors.green);
+
+        // Navigator.pushAndRemoveUntil(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (BuildContext context) => const bottomTab()),
+        //     (route) => false);
+      } else {
+        showFlushbar('Invalid credentials. Please try again.', Colors.red);
+      }
+    } catch (error) {
+      print("Error during login: $error");
+      showFlushbar(
+          'An error occurred during login. Please try again.', Colors.red);
+    }
+  }
+
+  void showFlushbar(String message, Color color) {
+    Flushbar(
+      title: 'Login',
+      message: message,
+      flushbarPosition: FlushbarPosition.TOP,
+      duration: const Duration(seconds: 2),
+      margin: const EdgeInsets.all(8),
+      borderRadius: BorderRadius.circular(8),
+      backgroundColor: color, // Set background color based on success or error
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Image.asset(
-          'assets/LogoApp_movie2.png',
-          fit: BoxFit.cover,
-          height: 80,
-          filterQuality: FilterQuality.high,
+    return GestureDetector(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Image.asset(
+            'assets/LogoApp_movie2.png',
+            fit: BoxFit.cover,
+            height: 80,
+            filterQuality: FilterQuality.high,
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-        margin: EdgeInsets.all(24),
-        child: Column(
-          children: [
-            // _header(context),
-            _inputField(
-              context,
-            )
-          ],
+        body: Container(
+          margin: EdgeInsets.all(24),
+          child: Column(
+            children: [
+              // _header(context),
+              _inputField(
+                context,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -107,19 +130,17 @@ class _PageLoginState extends State<PageLogin> {
         ),
         SizedBox(height: 8),
         FilledButton.tonal(
-                onPressed: () {
-                  _login(context);
-                },
-                style: FilledButton.styleFrom(
-                  fixedSize: Size(MediaQuery.of(context).size.width, 60),
-                  shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                ),
-                child: const Text(
-                  'เข้าสู่ระบบ',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
+          onPressed: () => login(),
+          style: FilledButton.styleFrom(
+            fixedSize: Size(MediaQuery.of(context).size.width, 60),
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 13),
+          ),
+          child: const Text(
+            'เข้าสู่ระบบ',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
         SizedBox(
           height: 20,
         ),
@@ -143,22 +164,4 @@ class _PageLoginState extends State<PageLogin> {
       ],
     );
   }
-}
-Future<void> _login(context) async {
-  await Flushbar(
-    title: 'Login',
-    message:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-    duration: const Duration(seconds: 2),
-    margin: const EdgeInsets.all(8),
-    borderRadius: BorderRadius.circular(8),
-  ).show(context);
-
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (BuildContext context) {
-      return const bottomTab();
-    }),
-    (route) => false,
-  );
 }

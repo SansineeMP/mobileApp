@@ -23,8 +23,8 @@ class TrendingSlider extends StatelessWidget {
         itemBuilder: (context,itemIndex,pageViewIndex) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              'assets/test3.jpg',
+            child: Image.network(
+              'https://www.washingtonpost.com/graphics/2019/entertainment/oscar-nominees-movie-poster-design/img/black-panther-web.jpg',
               height: 300,
             width: 200,
             
