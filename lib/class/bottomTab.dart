@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:watchmovie_app/account.dart';
 import 'package:watchmovie_app/home_screen.dart';
+import 'package:watchmovie_app/Hothit.dart';
 //import 'package:watchmovie_app/home_screen2.dart';
 
 class bottomTab extends StatefulWidget {
@@ -14,11 +16,12 @@ class _bottomTabState extends State<bottomTab> {
   NavigationDestinationLabelBehavior labelBehavior =
       NavigationDestinationLabelBehavior.alwaysHide;
 
+    
   // List of pages
   final List<Widget> pages = [
     HomeScreen(),
-    CommutePage(),
-    SavedPage(),
+    Hothit(),
+    Account()
   ];
 
   @override
@@ -36,16 +39,16 @@ class _bottomTabState extends State<bottomTab> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.home),
-            label: 'Explore',
+            label: 'Home',
           ),
           NavigationDestination(
             icon: Icon(Icons.tv),
-            label: 'Commute',
+            label: 'Hothit',
           ),
           NavigationDestination(
             // selectedIcon: Icon(Icons.account_balance),
             icon: Icon(Icons.account_circle),
-            label: 'Saved',
+            label: 'Account',
           ),
         ],
       ),
@@ -58,7 +61,7 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Explore Page'),
+      child: Text('Home'),
     );
   }
 }
@@ -67,7 +70,7 @@ class CommutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Commute Page'),
+      child: Text('Hothit'),
     );
   }
 }
@@ -76,7 +79,7 @@ class SavedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Saved Page'),
+      child: Text('Account'),
     );
   }
 }

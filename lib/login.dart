@@ -1,9 +1,9 @@
-//import 'dart:convert';
+// import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:watchmovie_app/class/bottomTab.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watchmovie_app/class/url.dart';
-//import 'package:watchmovie_app/class/url.dart';
 import 'package:watchmovie_app/register.dart';
 import 'package:another_flushbar/flushbar.dart';
 
@@ -20,27 +20,34 @@ class _PageLoginState extends State<PageLogin> {
   TextEditingController pass_word = TextEditingController();
 
   login() async {
-    try {
-      final response = await dio.post("$ipcon/member/login",
-          data: {'phone': username.text, 'pass_word': pass_word.text});
-      print(response);
+    if (username.text.isNotEmpty && pass_word.text.isNotEmpty) {
+      try {
+        var response = await dio.post("$ipcon/auth/login",
+            data: {'username': username.text, 'pass_word': pass_word.text});
 
-      if (response.statusCode == 200) {
-        showFlushbar('Login success', Colors.green);
-
-        // Navigator.pushAndRemoveUntil(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (BuildContext context) => const bottomTab()),
-        //     (route) => false);
-      } else {
-        showFlushbar('Invalid credentials. Please try again.', Colors.red);
+        // print(response.data);
+        if (response.statusCode == 200) {
+          final SharedPreferences pfrs = await SharedPreferences.getInstance();
+          pfrs.setBool('isLogged', true);
+          pfrs.setInt('ID_Member',response.data);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => bottomTab()),
+              (route) => false);
+              // username.text == "";
+              // pass_word.text == "";
+        }
+      } catch (error) {
+        // print("Error during login: $error");
+        showFlushbar(
+            'An error occurred during login. Please try again.', Colors.red);
       }
-    } catch (error) {
-      print("Error during login: $error");
-      showFlushbar(
-          'An error occurred during login. Please try again.', Colors.red);
+    } else {
+      showFlushbar('Invalid credentials. Please try again.', Colors.orange);
     }
+    username.text == "";
+    pass_word.text == "";
   }
 
   void showFlushbar(String message, Color color) {
@@ -74,7 +81,6 @@ class _PageLoginState extends State<PageLogin> {
           margin: EdgeInsets.all(24),
           child: Column(
             children: [
-              // _header(context),
               _inputField(
                 context,
               )
@@ -82,20 +88,6 @@ class _PageLoginState extends State<PageLogin> {
           ),
         ),
       ),
-    );
-  }
-
-  _header(context) {
-    return Column(
-      children: [
-        Text(
-          'Welcome To App',
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'Enter to Login',
-        ),
-      ],
     );
   }
 
@@ -115,9 +107,11 @@ class _PageLoginState extends State<PageLogin> {
             filled: true,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         TextField(
           controller: pass_word,
+          obscureText: true,
+          obscuringCharacter: "*",
           decoration: InputDecoration(
             hintText: "รหัสผ่าน",
             border: OutlineInputBorder(
@@ -128,7 +122,7 @@ class _PageLoginState extends State<PageLogin> {
             filled: true,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         FilledButton.tonal(
           onPressed: () => login(),
           style: FilledButton.styleFrom(
@@ -141,7 +135,7 @@ class _PageLoginState extends State<PageLogin> {
             style: TextStyle(fontSize: 18),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(

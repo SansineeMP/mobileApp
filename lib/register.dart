@@ -1,5 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
+// import 'package:another_flushbar/flushbar_route.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+// import 'package:watchmovie_app/class/url.dart';
 import 'package:watchmovie_app/login.dart';
 
 class PageRegister extends StatefulWidget {
@@ -10,6 +13,7 @@ class PageRegister extends StatefulWidget {
 }
 
 class _PageRegisterState extends State<PageRegister> {
+  final Dio dio = Dio();
   late PageController _pageController;
   late TextEditingController _fNameController;
   late TextEditingController _lNameController;
@@ -107,14 +111,33 @@ class _PageRegisterState extends State<PageRegister> {
   }
 
   Future<void> _postValues() async {
-    // print(
-    //   'First Name: ${_fNameController.text}',
-    //   'Last Name: ${_lNameController.text}',
-    //   'Password: ${_passwordController.text}',
-    //   'Email: ${_emailController.text}',
-    //   'Phone: ${_phoneController.text}',
-    //   'Selected Package: $_selectedPackage',
-    // );
+    // if(_passwordController.text.isNotEmpty || _emailController.text.isNotEmpty || _phoneController.text.isNotEmpty){
+    //   try{
+    //     var response = await dio.post("$ipcon/auth/register",
+    //         data: {'firstname':_fNameController.text,'surename':_lNameController.text,'pass_word':_passwordController.text,'Email':_emailController.text,'phone':_phoneController});
+          
+    //     print(response.data);
+    //     // await Flushbar(
+    //     //   title: 'Register',
+    //     //   message: "Saved",
+    //     //   flushbarPosition: FlushbarPosition.TOP,
+    //     //   duration: const Duration(seconds: 2),
+    //     //   margin: EdgeInsets.all(8),
+    //     //   borderRadius: BorderRadius.circular(8),
+    //     // ).show(context);
+
+    //     if(response.statusCode == 200){
+    //       Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (BuildContext context) => const PageLogin()),
+    //       (route) => false);
+    //     }
+    //   }catch (error) {
+    //     // print("Error during login: $error");
+    //     showFlushbar(
+    //         'An error occurred during Register. Please try again.', Colors.red);
+    //     }
+    // }
 
     await Flushbar(
       title: 'Register',
@@ -131,6 +154,20 @@ class _PageRegisterState extends State<PageRegister> {
         MaterialPageRoute(builder: (BuildContext context) => const PageLogin()),
         (route) => false);
   }
+
+
+  void showFlushbar(String message, Color color) {
+    Flushbar(
+      title: 'Register',
+      message: message,
+      flushbarPosition: FlushbarPosition.TOP,
+      duration: const Duration(seconds: 2),
+      margin: const EdgeInsets.all(8),
+      borderRadius: BorderRadius.circular(8),
+      backgroundColor: color, // Set background color based on success or error
+    ).show(context);
+  }
+
 
   @override
   Widget build(BuildContext context) {

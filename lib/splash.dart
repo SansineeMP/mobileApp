@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:watchmovie_app/home_screen2.dart';
+import 'package:watchmovie_app/Hothit.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
             onLoaded: (composition) {
               _controller
                 ..duration = composition.duration
-                ..forward().then((value) => Get.to(() => Homepage(),
+                ..forward().then((value) => Get.to(() => Hothit(),
                     transition: Transition.fadeIn,
                     duration: Duration(seconds: 1)));
             },
