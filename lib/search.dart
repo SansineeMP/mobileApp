@@ -10,17 +10,17 @@ class PageSearch extends StatefulWidget {
 
 class _PageSearchState extends State<PageSearch> {
   static List<MovieModel> main_movie_list = [
-    MovieModel("The Godfather", 1991, 9.3,
+    MovieModel("The Godfather", 
         "https://m.media-amazon.com/images/W/MEDIAX_792452-T1/images/I/51Eq4-xce0L._AC_SL1000_.jpg"),
-    MovieModel("The Dark Knight", 1992, 9.0,
+    MovieModel("The Dark Knight", 
         "https://down-th.img.susercontent.com/file/th-11134207-7qul8-lk5b3ozxg9qh60"),
-    MovieModel("Pulp Fiction", 1993, 8.3,
+    MovieModel("Pulp Fiction",
         "https://lzd-img-global.slatic.net/g/p/981288f2288eaa06648492aee4139a95.jpg_720x720q80.jpg"),
-    MovieModel("The Lord of the Reing", 1994, 9.3,
+    MovieModel("The Lord of the Reing",
         "https://th-live-01.slatic.net/p/35c17d17b366a2cc31e20399e7dd370d.jpg"),
-    MovieModel("12 Angry Men", 1995, 6.7,
+    MovieModel("12 Angry Men",
         "https://ae01.alicdn.com/kf/HTB16UJzcAfb_uJkSndVq6yBkpXah.jpg_640x640Q90.jpg_.webp"),
-    MovieModel("Star Wars", 1996, 7.3,
+    MovieModel("Star Wars",
         "https://down-th.img.susercontent.com/file/945dd25000782513327e181e8f6316de"),
   ];
 
@@ -84,17 +84,17 @@ class _PageSearchState extends State<PageSearch> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: Text(
-                     '${display_list[index].movie_release_year!}',
-                     style: TextStyle(
-                      color: Colors.white60,
-                     ),
-                    ),
-                    trailing: Text('${display_list[index].reting}',
-                      style: TextStyle(
-                        color: Colors.amber
-                      ),
-                    ),
+                    // subtitle: Text(
+                    //  '${display_list[index].movie_release_year!}',
+                    //  style: TextStyle(
+                    //   color: Colors.white60,
+                    //  ),
+                    // ),
+                    // trailing: Text('${display_list[index].reting}',
+                    //   style: TextStyle(
+                    //     color: Colors.amber
+                    //   ),
+                    // ),
                     leading: Image.network(display_list[index].movie_poster_url!),
                   ),
             ),

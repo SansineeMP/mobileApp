@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 // import 'package:another_flushbar/flushbar_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:watchmovie_app/class/url.dart';
 // import 'package:watchmovie_app/class/url.dart';
 import 'package:watchmovie_app/login.dart';
 
@@ -20,18 +21,32 @@ class _PageRegisterState extends State<PageRegister> {
   late TextEditingController _passwordController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
+  late TextEditingController _genderController;
+  late TextEditingController _addressController;
   String _selectedPackage = '';
   int _currentPageIndex = 0;
+  List info_package = [];
+
+  get_package() async {
+    final response = await dio.get('$ipcon/package');
+    print(response.data);
+    setState(() {
+      info_package = response.data;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    get_package();
     _pageController = PageController();
     _fNameController = TextEditingController();
     _lNameController = TextEditingController();
     _passwordController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
+    _genderController = TextEditingController();
+    _addressController = TextEditingController();
   }
 
   @override
@@ -42,6 +57,8 @@ class _PageRegisterState extends State<PageRegister> {
     _passwordController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _genderController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
@@ -111,50 +128,60 @@ class _PageRegisterState extends State<PageRegister> {
   }
 
   Future<void> _postValues() async {
-    // if(_passwordController.text.isNotEmpty || _emailController.text.isNotEmpty || _phoneController.text.isNotEmpty){
-    //   try{
-    //     var response = await dio.post("$ipcon/auth/register",
-    //         data: {'firstname':_fNameController.text,'surename':_lNameController.text,'pass_word':_passwordController.text,'Email':_emailController.text,'phone':_phoneController});
-          
-    //     print(response.data);
-    //     // await Flushbar(
-    //     //   title: 'Register',
-    //     //   message: "Saved",
-    //     //   flushbarPosition: FlushbarPosition.TOP,
-    //     //   duration: const Duration(seconds: 2),
-    //     //   margin: EdgeInsets.all(8),
-    //     //   borderRadius: BorderRadius.circular(8),
-    //     // ).show(context);
+    if (_passwordController.text.isNotEmpty ||
+        _emailController.text.isNotEmpty ||
+        _phoneController.text.isNotEmpty) {
+      try {
+        var response = await dio.post("$ipcon/auth/register", data: {
+          'firstname': _fNameController.text,
+          'surename': _lNameController.text,
+          'pass_word': _passwordController.text,
+          'Email': _emailController.text,
+          'phone': _phoneController,
+          'sex': _genderController,
+          'address': _addressController,
+          // 'ID_Package': _selectedPackage
+        });
 
-    //     if(response.statusCode == 200){
-    //       Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (BuildContext context) => const PageLogin()),
-    //       (route) => false);
-    //     }
-    //   }catch (error) {
-    //     // print("Error during login: $error");
-    //     showFlushbar(
-    //         'An error occurred during Register. Please try again.', Colors.red);
-    //     }
-    // }
+          print(response.data);
+          await Flushbar(
+            title: 'Register',
+            message: "Saved",
+            flushbarPosition: FlushbarPosition.TOP,
+            duration: const Duration(seconds: 2),
+            margin: EdgeInsets.all(8),
+            borderRadius: BorderRadius.circular(8),
+          ).show(context);
 
-    await Flushbar(
-      title: 'Register',
-      message: "Saved",
-      flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 2),
-      margin: EdgeInsets.all(8),
-      borderRadius: BorderRadius.circular(8),
-    ).show(context);
+          if (response.statusCode == 200) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const PageLogin()),
+                (route) => false);
+          }
+      } catch (error) {
+        print("Error during Register: $error");
+        showFlushbar(
+            'An error occurred during Register. Please try again.', Colors.red);
+      }
+    }
 
-    // ignore: use_build_context_synchronously
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => const PageLogin()),
-        (route) => false);
+    // await Flushbar(
+    //   title: 'Register',
+    //   message: "Saved",
+    //   flushbarPosition: FlushbarPosition.TOP,
+    //   duration: const Duration(seconds: 2),
+    //   margin: EdgeInsets.all(8),
+    //   borderRadius: BorderRadius.circular(8),
+    // ).show(context);
+
+    // //ignore: use_build_context_synchronously
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (BuildContext context) => const PageLogin()),
+    //     (route) => false);
   }
-
 
   void showFlushbar(String message, Color color) {
     Flushbar(
@@ -167,7 +194,6 @@ class _PageRegisterState extends State<PageRegister> {
       backgroundColor: color, // Set background color based on success or error
     ).show(context);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -256,13 +282,28 @@ class _PageRegisterState extends State<PageRegister> {
             controller: _phoneController,
             decoration: _buildInputDecoration('Phone'),
           ),
+          const SizedBox(height: 16),
+          TextField(
+            keyboardType: TextInputType.phone, // Use phone keyboard type
+            controller: _genderController,
+            decoration: _buildInputDecoration('Gender'),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            keyboardType: TextInputType.phone, // Use phone keyboard type
+            controller: _addressController,
+            decoration: _buildInputDecoration('Address'),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildStep2() {
-    List<String> packages = ['99/30 วัน', '999/1 ปี', 'ทดลองใช้ 7 วัน'];
+    // List<String> packages = ['รายวัน','รายเดือน','รายปี'];
+    List packages = info_package;
+    // String packageDetail = info_package[0]['packageDetail'];
+    // List<String> packages = packageDetail.split(',');
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -276,12 +317,14 @@ class _PageRegisterState extends State<PageRegister> {
             child: ListView.builder(
               itemCount: packages.length,
               itemBuilder: (context, index) {
-                final package = packages[index];
+                final package = packages[index]['packageDetail'];
+                // final idPackage = package[index]['ID_package'];
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
+                        // เก็บ ID_package เมื่อผู้ใช้คลิก
                         _selectedPackage = package;
                       });
                     },
@@ -324,13 +367,32 @@ class _PageRegisterState extends State<PageRegister> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           // Add your payment UI here
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/qrtest.jpg',
-              width: 400,
-              height: 400,
-              fit: BoxFit.cover,)
+              Container(
+                height: 300,
+              ),
+              Container(
+                width: 200,
+                height: 250,
+                child: Image.asset(
+                  'assets/qrtest.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ],
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'กรุณาชำระเงิน',
+                style: TextStyle(
+                  fontSize: 16, color: Colors.white
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

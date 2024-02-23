@@ -17,7 +17,17 @@ class _EditAccountState extends State<EditAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 31, 27, 27),
+        title: Center(
+          child: Image.asset(
+            'assets/LogoApp_movie2.png',
+            fit: BoxFit.cover,
+            height: 80,
+            filterQuality: FilterQuality.high,
+          ),
+        ),
       ),
       body: Center(
         child: Column(
